@@ -9,6 +9,7 @@ import './Main.css';
 
 function App() {
   const [devs, setDevs] = useState([]);
+
   const [git_username, setGitUsername] = useState('');
   const [techs, setTechs] = useState(''); 
   const [latitude, setLatitude] = useState('');
@@ -33,7 +34,7 @@ function App() {
   useEffect(() => {
     async function loadDevs() {
       const response = await api.get('/devs');
-      setDevs(response);
+      setDevs(response.data);
     }
 
     loadDevs();
@@ -51,6 +52,8 @@ function App() {
 
     setGitUsername('');
     setTechs('');
+
+    setDevs([...devs, response.data]);
   }
 
   return (
@@ -113,50 +116,19 @@ function App() {
 
       <main>
         <ul>
-          <li className="dev-item">
-            <header>
-              <img src="https://avatars0.githubusercontent.com/u/6667778?s=460&v=4" alt=""/>
-              <div className="user-info">
-                <strong>Gabriel Almeida</strong>
-                <span>PHP, Node.js, React.js, React Native, Rails</span>
-              </div>
-            </header>
-            <p>Full Stack Developer - PHP, Ruby, JS</p>
-            <a href="https://github.com/Gabrielgqa">Acessar perfil no Github</a>
-          </li>
-          <li className="dev-item">
-            <header>
-              <img src="https://avatars0.githubusercontent.com/u/6667778?s=460&v=4" alt=""/>
-              <div className="user-info">
-                <strong>Gabriel Almeida</strong>
-                <span>PHP, Node.js, React.js, React Native, Rails</span>
-              </div>
-            </header>
-            <p>Full Stack Developer - PHP, Ruby, JS</p>
-            <a href="https://github.com/Gabrielgqa">Acessar perfil no Github</a>
-          </li>
-          <li className="dev-item">
-            <header>
-              <img src="https://avatars0.githubusercontent.com/u/6667778?s=460&v=4" alt=""/>
-              <div className="user-info">
-                <strong>Gabriel Almeida</strong>
-                <span>PHP, Node.js, React.js, React Native, Rails</span>
-              </div>
-            </header>
-            <p>Full Stack Developer - PHP, Ruby, JS</p>
-            <a href="https://github.com/Gabrielgqa">Acessar perfil no Github</a>
-          </li>
-          <li className="dev-item">
-            <header>
-              <img src="https://avatars0.githubusercontent.com/u/6667778?s=460&v=4" alt=""/>
-              <div className="user-info">
-                <strong>Gabriel Almeida</strong>
-                <span>PHP, Node.js, React.js, React Native, Rails</span>
-              </div>
-            </header>
-            <p>Full Stack Developer - PHP, Ruby, JS</p>
-            <a href="https://github.com/Gabrielgqa">Acessar perfil no Github</a>
-          </li>
+          {devs.map(dev => (
+            <li key={dev._id} className="dev-item">
+              <header>
+                <img src={dev.avatar_url} alt={dev.name}/>
+                <div className="user-info">
+                  <strong>{dev.name}</strong>
+                  <span>{dev.techs.join(', ')}</span>
+                </div>
+              </header>
+              <p>{dev.bio}</p>
+              <a href={`https://github.com/${dev.git_username}`}>Acessar perfil no Github</a>
+            </li>
+          ))}
         </ul>
       </main>
     </div>
